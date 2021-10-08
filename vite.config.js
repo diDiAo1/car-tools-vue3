@@ -8,12 +8,17 @@ export default defineConfig({
   define: {
     'process.env': {
       VUE_APP_API_BASE : '/carservice'
-    }
+    },
   },
+  // externals: {
+  //   'AMap': 'AMap',
+  // },
   publicPath: './',
   server: { 
     port: 3000,
     open: true,
+    host: '0.0.0.0',	// ← 新增内容 ←
+    https: true,
     proxy: {
       '/carservice': {
         target: 'https://t.rsscc.com',
@@ -30,7 +35,10 @@ export default defineConfig({
       '@': resolve(__dirname, 'src')
     }
 
-  }
+  },
+  "env": {
+    "node": true,
+  },
 })
 
 

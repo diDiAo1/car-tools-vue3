@@ -2,7 +2,7 @@
   "name": "hello-vue3",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "serve": "vite preview"
   },
@@ -10,6 +10,7 @@
     "axios": "^0.21.4",
     "element-plus": "^1.1.0-beta.12",
     "qs": "^6.10.1",
+    "vant": "^3.2.4",
     "vue": "^3.2.6",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2"

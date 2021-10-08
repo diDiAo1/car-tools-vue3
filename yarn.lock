@@ -25,7 +25,7 @@
   resolved "https://registry.nlark.com/@element-plus/icons/download/@element-plus/icons-0.0.11.tgz#9b187c002774548b911850d17fa5fc2f9a515f57"
   integrity sha1-mxh8ACd0VIuRGFDRf6X8L5pRX1c=
 
-"@popperjs/core@^2.10.1":
+"@popperjs/core@^2.10.1", "@popperjs/core@^2.9.2":
   version "2.10.1"
   resolved "https://registry.nlark.com/@popperjs/core/download/@popperjs/core-2.10.1.tgz?cache=0&sync_timestamp=1630646793367&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40popperjs%2Fcore%2Fdownload%2F%40popperjs%2Fcore-2.10.1.tgz#728ecd95ab207aab8a9a4e421f0422db329232be"
   integrity sha1-co7NlasgequKmk5CHwQi2zKSMr4=
@@ -34,6 +34,28 @@
   version "0.0.48"
   resolved "https://registry.nlark.com/@types/estree/download/@types/estree-0.0.48.tgz?cache=0&sync_timestamp=1629707624966&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Festree%2Fdownload%2F%40types%2Festree-0.0.48.tgz#18dc8091b285df90db2f25aa7d906cfc394b7f74"
   integrity sha1-GNyAkbKF35DbLyWqfZBs/DlLf3Q=
+
+"@vant/icons@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.nlark.com/@vant/icons/download/@vant/icons-1.7.1.tgz?cache=0&sync_timestamp=1631954436455&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40vant%2Ficons%2Fdownload%2F%40vant%2Ficons-1.7.1.tgz#49ae420302b5581e54e6894891e5a05bc76e9f87"
+  integrity sha1-Sa5CAwK1WB5U5olIkeWgW8dun4c=
+
+"@vant/lazyload@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npmmirror.com/@vant/lazyload/download/@vant/lazyload-1.3.0.tgz#2a743339f271989dbf87f7a4c55c9fff7ebc774e"
+  integrity sha1-KnQzOfJxmJ2/h/ekxVyf/368d04=
+
+"@vant/popperjs@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@vant/popperjs/download/@vant/popperjs-1.1.0.tgz#b4edee5bbfa6fb18705986e313d4fd5f17942a0f"
+  integrity sha1-tO3uW7+m+xhwWYbjE9T9XxeUKg8=
+  dependencies:
+    "@popperjs/core" "^2.9.2"
+
+"@vant/use@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.nlark.com/@vant/use/download/@vant/use-1.3.1.tgz#8609fc7f86713df0c4ace7109eee6df2f3bd9a0f"
+  integrity sha1-hgn8f4ZxPfDErOcQnu5t8vO9mg8=
 
 "@vitejs/plugin-vue@^1.6.1":
   version "1.6.2"
@@ -514,6 +536,16 @@ util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.nlark.com/util-deprecate/download/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
+
+vant@^3.2.4:
+  version "3.2.4"
+  resolved "https://registry.npmmirror.com/vant/download/vant-3.2.4.tgz#0d9fd0c58a09d56b91c4d5410fee0cdb989c8eb8"
+  integrity sha1-DZ/QxYoJ1WuRxNVBD+4M25icjrg=
+  dependencies:
+    "@vant/icons" "^1.7.1"
+    "@vant/lazyload" "^1.3.0"
+    "@vant/popperjs" "^1.1.0"
+    "@vant/use" "^1.3.1"
 
 vite@^2.5.4:
   version "2.5.7"
