@@ -32,5 +32,39 @@
     margin: 0;
     height: 0;
   }
+
+
+  
+.basePopup {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 1000%;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-align: center;
+  width: 100%;
+}
+.basePopup.show {
+  opacity: 1;
+  left: 0;
+}
+
+.basePopup.show .content-pop{
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+} 
+
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+}
   
 </style>

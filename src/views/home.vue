@@ -1,16 +1,21 @@
 <template>
   <div id="container" class="amap"></div>
-  <div class="bottom">
+  
+  <div class="center-marker">
+      <p class="text-center">在这里上车</p>
+      <van-image class="img-center" src="/src/images/address/location.png"></van-image>
+  </div>
 
+
+  <div class="bottom">
     <div class="tab">
-      <van-tabs v-model:active="state.activeName">
+      <van-tabs v-model:active="state.activeName" color="#1989fa" >
         <van-tab title="现在" name="0">
           <div class="content">
             <div class="item">
                 <span class="circle green"></span>
-                <div data-name='start' class="item-input last input-placeholder-time" @click="inputAddress">
-                  {{state.startPlace}} 
-                  <van-image class="arrow-img" hidden="{{serviceTimeStr}}" src="/src/images/address/arrow.png"></van-image>
+                <div data-name='start' class="item-input last input-placeholder-time">
+                  {{state.startPlace || startDefaultStr}} 
                 </div>
                 <p class="tip">为您推荐附近的最佳上车点</p>
             </div>
@@ -18,61 +23,77 @@
                 <span class="circle orange"></span>
                 <div data-name='end' class="item-input end-pos last input-placeholder-end" @click="inputAddress">{{state.endPlace || endDefaultStr}}</div>
             </div>
-            <div class="history" v-if="history.length">
+            
+            <!-- <div class="history" v-if="history.length">
               <div v-for="item in history" :key="item.addressId" @click="selectAddress" class="detail-con">
                 {{item.position}}
               </div>
-            </div>
+            </div> -->
           </div>
 
         </van-tab>
         <van-tab title="预约" name="1">
           <div class="content">
-            <!-- <div class="item">
+            <div class="item">
               <van-image class="time-img" src="/src/images/address/time.png"></van-image>
               <div data-name='time' class="item-input input-placeholder-time" @click="timeSelect">
-                {{serviceTimeStr || defaultStr}} 
-                <van-image class="arrow-img" hidden="{{serviceTimeStr}}" src="/src/images/address/arrow.png"></van-image>
+                {{state.serviceTimeStr || defaultStr}} 
+                <van-image class="arrow-img" v-if="!state.serviceTimeStr" src="/src/images/address/arrow.png"></van-image>
               </div>
             </div>
             <div class="item">
                 <span class="circle green"></span>
-                <div data-name='start' class="item-input last input-placeholder-time" @click="inputAddress">
-                  {{startPlace}} 
-                  <van-image class="arrow-img" hidden="{{serviceTimeStr}}" src="/src/images/address/arrow.png"></van-image>
+                <div data-name='start' class="item-input last input-placeholder-time">
+                  {{state.startPlace || startDefaultStr}} 
+                  <van-image class="arrow-img" v-if="!state.serviceTimeStr" src="/src/images/address/arrow.png"></van-image>
                 </div>
                 <p class="tip">为您推荐附近的最佳上车点</p>
             </div>
             <div class="item end-item">
                 <span class="circle orange"></span>
-                <div data-name='end' class="item-input end-pos last input-placeholder-end" @click="inputAddress">{{endPlace || endDefaultStr}}</div>
-            </div> -->
-            <div class="history" v-if="history.length">
+                <div data-name='end' class="item-input end-pos last input-placeholder-end" @click="inputAddress">{{state.endPlace || endDefaultStr}}</div>
+            </div>
+            <!-- <div class="history" v-if="history.length">
               <div v-for="item in history" :key="item.addressId" @click="selectAddress" class="detail-con">
                 {{item.position}}
               </div>
-            </div>
+            </div> -->
           </div>
         </van-tab>
         <van-tab title="接送机" name="2">接送机</van-tab>
         <van-tab title="接送站" name="3">接送站</van-tab>
       </van-tabs>
+
+      <Time
+        :visible="state.timeVisible"
+        @ok="handleOk"
+        @cancel="handleCancel"
+      >
+      </Time>
+      <!-- <Footer></Footer> -->
     </div>
   </div>
 </template>
 
 <script>
-import {  reactive,onMounted } from 'vue'
+import {  defineAsyncComponent,reactive,onMounted } from 'vue'
 import {history} from '@/data'
-import locationUrl from '@/images/address/location.png'
+import {formatTime} from '@/utils/util'
+import router from '../router'
+// import Time from '@/components/Time.vue'
 // import AMap from 'AMap'
 export default {
   name: 'home',
+  components: {
+    Time: defineAsyncComponent(() => import("@/components/Time.vue")),
+    // Footer: defineAsyncComponent(() => import("@/components/Footer.vue")),
+  },
   data() {
     return {
       history,
-      locationUrl,
+      startDefaultStr: '在哪上车？',
       endDefaultStr: '您想去哪里？',
+      defaultStr: '选择出发时间',
     }
   },
   setup() {
@@ -83,36 +104,36 @@ export default {
       activeName: '0',
       currentData: null,
 
-      text: null,
-      marker: null,
-      content: '<div class="text-center">在这里上车</div>',
-
       startCity: '',
       startPlace: '',
       startLatLng: [0,0],
       endCity: '',
       endPlace: '',
       endLatLng: [],
+
+
+      timeVisible: false,
+      serviceTimeStr: '',
     })
 
     const initMap = () => {
       state.map = new AMap.Map("container", {
         // center: state.centerpoint,
         animateEnable: true,
-        zoom: 12
+        zoom: 17
       });
 
-      state.text = new AMap.Marker({
-        content: state.content,
-        offset: new AMap.Pixel(-35, -56),
-      });
-      state.marker = new AMap.Marker({
-        icon: locationUrl,
-      });
+      // state.text = new AMap.Marker({
+      //   content: state.content,
+      //   offset: new AMap.Pixel(-35, -56),
+      // });
+      // state.marker = new AMap.Marker({
+      //   icon: locationUrl,
+      // });
 
       //移动地图时触发
       state.map.on('moveend', (e) => {
-        console.log('moveend',state.map.getCenter())
+        // console.log('moveend',state.map.getCenter())
         let center = state.map.getCenter()
         let lnglatXY = [center.lng, center.lat];// 地图上所标点的坐标
         AMap.service('AMap.Geocoder', function() {// 回调函数
@@ -121,7 +142,11 @@ export default {
                 if (status === 'complete' && result.info === 'OK') {
                     // console.log(result.regeocode.formattedAddress);
                     // var address = result.regeocode.formattedAddress;
-                    console.log(result);
+                    console.log('moveend',result);
+                    state.startCity = result.regeocode.addressComponent.city
+                    state.endCity = result.regeocode.addressComponent.city
+                    state.startPlace = result.regeocode.formattedAddress.replace(result.regeocode.addressComponent.city,'').replace(result.regeocode.addressComponent.province,'')
+                    // console.log(result.formattedAddress.replace(result.addressComponent.city,''))
                 } else {
                 }
             });
@@ -166,28 +191,45 @@ export default {
             // console.log(result.formattedAddress.replace(result.addressComponent.city,''))
 
             //
-            state.text.setPosition(result.position)
-            state.marker.setPosition(result.position)
-            state.map.add(state.text);
-            state.map.add(state.marker);
-
-
-
+            // state.text.setPosition(result.position)
+            // state.marker.setPosition(result.position)
+            // state.map.add(state.text);
+            // state.map.add(state.marker);
 
           }
         });
       });
     }
 
+    const timeSelect = () => {
+      state.timeVisible = true
+    }
+
+    const handleOk = data => {
+      state.serviceTimeStr = formatTime(data)
+      state.timeVisible = false
+    }
+
+    const handleCancel = () => {
+      state.timeVisible = false
+    }
+
+    const inputAddress = () => {
+      router.push({name:"addressSelect"})
+    }
+
     // 设置中心点
     onMounted(() => {
-      getPosition()
-      initMap();
+      // getPosition()
+      // initMap();
     });
 
     return {
       state,
       initMap,
+      timeSelect,
+      handleOk,
+      handleCancel,
     }
   }
 
@@ -204,26 +246,32 @@ export default {
   display: none!important;
 }
 
-.amap-icon img {
-  display: inline-block;
-  margin-top: 4px;
-  width: 38px;
-  height: 42px;
+.center-marker {
+  position: absolute;
+  left: 50%;
+  top: calc( 50% - 40px);
+  transform: translate(-50%, -50%);
+  /* height: 70px; */
+  text-align: center;
 }
-
-
 .text-center {
   width: 84px;
   height: 30px;
   line-height: 30px;
   background: #fefffe;
-  border-radius: 40rpx;
+  border-radius: .40rem;
   text-align: center;
-  font-size: 24rpx;
-  font-family: 'PingFangSC', 'PingFangSC-Regular';
+  font-size: .24rem;
+  font-family: PingFangSC, PingFangSC-Regular;
   font-weight: 400;
   color: #666;
   box-shadow: 0 2px 16px rgb(0, 0, 0, .06);
+}
+.img-center {
+  display: inline-block;
+  margin-top: 2px;
+  width: 38px;
+  height: 42px;
 }
 
 .bottom {
@@ -470,7 +518,7 @@ input {
 .time-img {
   width: .28rem;
   height: .28rem;
-  position: absolute;
+  position: absolute!important;
   top: .42rem;
   left: .16rem;
 }
