@@ -18,15 +18,31 @@ export const store = createStore({
         // orderTime: '', //下单时间
         startLatLng: [], //包含startLatitude和startLongitude
         startPlace: '', //出发地
+        activeName: '0',
         // startAddress: '', // sub开始地址
         startCity: '',
         // startCityId: '',
-        endPosition: [], //包含endLatitude和endLongitude
+        endLatLng: [], //包含endLatitude和endLongitude
         endPlace: '', //目的地
         endCity: '',
         // endCityId: '',
         // endAddress: '', // sub下车地址
-        orderTimeYMD: '', //下单时间
+        serviceTime: '', //下单时间
+
+        carLevel: '经济型',// 车型
+        userName: '',
+        userPhone: '',
+        rideNum: 1,
+        demandLabel: '',
+
+        carNumber:'鄂A23674',
+        driverName:'李师傅',
+        carColor:'白色',
+        carName:'东风风神',
+        seatNum:'5',
+        companyName:'武汉车队',
+
+
         switchItem: 0,
         serviceType: 0,
         fly_no: '', //航班号/火车车次
@@ -41,7 +57,7 @@ export const store = createStore({
     increment(state) {
       state.count++
     },
-    change(data) {
+    change(state,data) {
       for(let i in data) {
         state.order[i] = data[i]
       }

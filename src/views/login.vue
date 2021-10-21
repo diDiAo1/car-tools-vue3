@@ -51,7 +51,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 Page {
   background-color: #fff;
   overflow: hidden;

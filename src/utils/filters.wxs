@@ -1,0 +1,81 @@
+var getIncludes =  function (arr, index) {
+  if (arr.indexOf(index) < 0) {
+    return false
+  } else {
+    return true
+  }
+}
+
+// 详情-司机已接单-服务前3小时-暂定支持修改取消订单
+// 修改成司机已接单 都可修改和取消订单
+// 2020-10-28 15:30:00
+var detailUpdateShow = function(orderStatus, serviceTime) {
+  // var t = getDate(serviceTime).getTime() - getDate().getTime();
+  // var hours = t / 1000 / 60 / 60 ; // 间隔小时
+  if(orderStatus == 2) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// 详情-服务完成-24小时后-不支持打电话
+// 2020-10-28 15:30:00
+var detailTellHide = function(orderStatus, endServiceTime) {
+  var t = getDate().getTime() - getDate(endServiceTime).getTime();
+  var hours = t / 1000 / 60 / 60 ; // 间隔小时
+  if(orderStatus == 7 && hours > 24) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// 格式化时间字符串 2020-11-28 21:35:00 ==》11/28 21:35
+var timeStrFormat = function(str) {
+  var timeStr = str.substring(5,16)
+  timeStr = timeStr.replace('-', "/")
+  return timeStr
+}
+
+// 格式化时间字符串YMD 2020-11-28 21:35:00 ==》2020-11-28
+var timeStrYMD = function(str) {
+  var timeStr = str.substring(0,11)
+  return timeStr
+}
+
+// 格式化时间字符串HM 2020-11-28 21:35:00 ==》21:35
+var timeStrHM = function(str) {
+  var timeStr = str.substring(11,16)
+  return timeStr
+}
+
+// 格式化时间字符串YMDHM 2020-11-28 21:35:00 ==》2020-11-28 21:35
+var timeStrYMDHM = function(str) {
+  var timeStr = str.substring(0,16)
+  return timeStr
+}
+
+// 格式化服务时间，到下单时候显示 2020-12-01 10:45:00 ==> 12月01日 10:45
+var timeStrMapOrder = function(str) {
+  var timeStr = str.replace('-', "/").replace('-', "/")
+  var date = getDate(timeStr)
+  var m = date.getMonth() + 1;
+  m = m < 10 ? '0' + m : m;
+  var day = date.getDate()
+  day = day < 10 ? '0' + day : day;
+  var hour = date.getHours()
+  hour = hour < 10 ? '0' + hour : hour;
+  var minutes = date.getMinutes()
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  return m + '月' + day + '日 ' + hour + ':' + minutes
+}
+
+module.exports.getIncludes = getIncludes
+module.exports.detailUpdateShow = detailUpdateShow
+module.exports.detailTellHide = detailTellHide
+module.exports.timeStrFormat = timeStrFormat
+module.exports.timeStrYMD = timeStrYMD
+module.exports.timeStrHM = timeStrHM
+module.exports.timeStrYMDHM = timeStrYMDHM
+module.exports.timeStrMapOrder = timeStrMapOrder

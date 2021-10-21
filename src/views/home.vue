@@ -1,4 +1,11 @@
 <template>
+
+  <van-nav-bar title="首页" style="position: fixed;width:100vw;background:#fff" @click-right="onClickRight">
+    <template #right>
+      <van-icon name="manager-o" size="18" />
+    </template>
+  </van-nav-bar>
+
   <div id="container" class="amap"></div>
   
   <div class="center-marker">
@@ -79,7 +86,9 @@
 import {  defineAsyncComponent,reactive,onMounted } from 'vue'
 import {history} from '@/data'
 import {formatTime} from '@/utils/util'
-import router from '../router'
+import { useRouter } from "vue-router";
+import { useStore } from 'vuex'
+import { key } from '../store'
 // import Time from '@/components/Time.vue'
 // import AMap from 'AMap'
 export default {
@@ -98,6 +107,7 @@ export default {
   },
   setup() {
     
+    const router = useRouter();
     const state = reactive({
       map: null,
       centerpoint: null,
@@ -105,6 +115,7 @@ export default {
       currentData: null,
 
       startCity: '',
+      startCityCode: '',
       startPlace: '',
       startLatLng: [0,0],
       endCity: '',
@@ -144,6 +155,8 @@ export default {
                     // var address = result.regeocode.formattedAddress;
                     console.log('moveend',result);
                     state.startCity = result.regeocode.addressComponent.city
+                    state.startLatLng = [center.lng, center.lat]
+                    state.startCityCode = result.regeocode.addressComponent.citycode
                     state.endCity = result.regeocode.addressComponent.city
                     state.startPlace = result.regeocode.formattedAddress.replace(result.regeocode.addressComponent.city,'').replace(result.regeocode.addressComponent.province,'')
                     // console.log(result.formattedAddress.replace(result.addressComponent.city,''))
@@ -184,7 +197,7 @@ export default {
             state.centerpoint = result.position
             state.map.setCenter(result.position)
 
-
+            state.startLatLng = [state.centerpoint.lng, state.centerpoint.lat]
             state.startCity = result.addressComponent.city
             state.endCity = result.addressComponent.city
             state.startPlace = result.formattedAddress.replace(result.addressComponent.city,'').replace(result.addressComponent.province,'')
@@ -215,13 +228,35 @@ export default {
     }
 
     const inputAddress = () => {
-      router.push({name:"addressSelect"})
+      changeOrder()
+      router.push({
+        name:"addressSelect",
+        query: {
+          city: state.endCity,
+          place: state.startPlace,
+          cityCode: state.startCityCode,
+          // city: '武汉市',
+          // place: '武昌区中北路104号',
+        }
+      })
+    }
+
+    const store = useStore(key)
+    const changeOrder = () => {
+      let {startCity, startLatLng, startPlace, activeName} = state
+      store.commit('change',{startCity, startLatLng, startPlace, activeName})
+    }
+
+    const onClickRight = () => {
+      router.push({
+        name:"person",
+      })
     }
 
     // 设置中心点
     onMounted(() => {
-      // getPosition()
-      // initMap();
+      getPosition()
+      initMap();
     });
 
     return {
@@ -230,21 +265,15 @@ export default {
       timeSelect,
       handleOk,
       handleCancel,
+      inputAddress,
+      onClickRight
     }
   }
 
 }
 </script>
 
-<style>
-.amap {
-  width: 100vw;
-  height: 100vh;
-}
-
-.amap-copyright {
-  display: none!important;
-}
+<style scoped>
 
 .center-marker {
   position: absolute;
@@ -429,6 +458,7 @@ export default {
   width: 100%;
   padding: 0 .40rem .08rem;
   margin-top: .34rem;
+  box-sizing: border-box;
 }
 
 input {

@@ -17,6 +17,17 @@
   margin-top: 60px;
 }
 
+.amap-copyright {
+  display: none!important;
+  visibility:hidden!important;
+}
+
+.amap {
+  width: 100vw;
+  height: 100vh;
+}
+
+
   html,
   body,
   #app {
@@ -26,6 +37,7 @@
 
   html {
     font-size: calc(100vw / 3.75 / 2);
+    text-align: left;
   }
 
   p {

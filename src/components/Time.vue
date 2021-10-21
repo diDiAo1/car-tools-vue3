@@ -42,7 +42,7 @@ export default defineComponent({
     const state = reactive({
       currentDate,
       show: props.visible,
-      minDate: new Date(2021, 09, 1),
+      minDate: new Date(2021, 9, 1),
       maxDate: new Date(2025, 10, 1),
     });
 
